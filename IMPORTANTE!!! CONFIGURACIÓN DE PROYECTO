@@ -1,0 +1,35 @@
+Si utilizas las librerias estandar para bluetooth de Ubuntu, una vez compiles te sera IMPOSIBLE conectar con el bitalino aunque este emparejado correctamente por bluetooth. Para arreglar esto se deben añadir las siguientes lineas al makefile autogenerado por QT Creator:
+
+   CFLAGS = -DHASBLUETOOTH
+   LIBS = -lbluetooth	
+
+
+
+La primera se debe añadir a la linea DEFINES, al comienzo del Makefile, por ejemplo:
+
+.
+.
+.
+DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DHASBLUETOOTH
+.
+.
+.
+
+
+La segunda se debe añadir a la linea de librerias LIB, un pelin más abajo, por ejemplo:
+.
+.
+.
+LIBS          = $(SUBLIBS) -lqwt -lbluetooth -lQt5Widgets -L/usr/lib/i386-linux-gnu -lQt5Gui -lQt5Core -lGL -lpthread 
+.
+.
+.
+
+Mucho cuidado porque cada vez que se limpia el proyecto, QT Creator genera un Makefile nuevo y hay que volver a editarlo!!!!
+Puedes darle a rebuild all para que se compile de nuevo el ejecutable, pero si haces clean all, el makefile sera generado de nuevo y se perderán los cambios.
+
+Para que utilice correctamente las librerias qwt, se debe incluir la siguiente linea en el archivo de proyecto "bitalino3.pro":
+
+CONFIG += qwt
+
+
